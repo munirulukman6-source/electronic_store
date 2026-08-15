@@ -1,9 +1,13 @@
 <?php
 // admin/returns/index.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
 $pageTitle  = 'Return Requests';
 $breadcrumb = [['label' => 'Returns', 'active' => true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 
 $status = get('status', '');
 $page   = max(1, (int)get('page', 1));

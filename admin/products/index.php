@@ -1,11 +1,12 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireInventory();
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 $pageTitle  = 'Products';
 $breadcrumb = [['label' => 'Products', 'active' => true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 
 $productModel = new Product();
 $db = Database::getInstance();

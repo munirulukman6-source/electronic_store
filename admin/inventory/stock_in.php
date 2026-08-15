@@ -1,10 +1,8 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
-
-$pageTitle  = 'Stock In';
-$breadcrumb = [['label'=>'Inventory','url'=>BASE_URL.'admin/inventory/'],['label'=>'Stock In','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireRole('admin','inventory_manager');
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireInventory();
 
 $inventoryModel = new Inventory();
 $suppliers      = $inventoryModel->getSuppliers();
@@ -33,6 +31,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
         $errors[] = $result['message'];
     }
 }
+
+$pageTitle  = 'Stock In';
+$breadcrumb = [['label'=>'Inventory','url'=>BASE_URL.'admin/inventory/'],['label'=>'Stock In','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 // Recent stock-in entries
 $recent = $db2->fetchAll(

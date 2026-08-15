@@ -1,12 +1,14 @@
 <?php
 // admin/coupons/index.php
-$pageTitle  = 'Coupons';
-$breadcrumb = [['label' => 'Coupons', 'active' => true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
 
+$db = Database::getInstance();
 $errors = [];
-// Handle POST
+
+// Handle POST before layout
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
     if ($action === 'create_coupon') {
@@ -28,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         redirect(BASE_URL . 'admin/coupons/');
     }
 }
+
+$pageTitle  = 'Coupons';
+$breadcrumb = [['label' => 'Coupons', 'active' => true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $coupons = $db->fetchAll("SELECT c.*, u.full_name AS created_by_name FROM coupons c LEFT JOIN users u ON c.created_by = u.id ORDER BY c.created_at DESC");
 ?>

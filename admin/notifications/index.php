@@ -1,9 +1,11 @@
 <?php
 // admin/notifications/index.php
-$pageTitle  = 'Notifications';
-$breadcrumb = [['label'=>'Notifications','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
 requireStaff();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
     $action = post('action');
@@ -18,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
         redirect(BASE_URL.'admin/notifications/');
     }
 }
+
+$pageTitle  = 'Notifications';
+$breadcrumb = [['label'=>'Notifications','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $page   = max(1,(int)get('page',1));
 $result = $db->paginate(

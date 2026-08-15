@@ -1,9 +1,13 @@
 <?php
 // admin/reports/revenue.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
 $pageTitle  = 'Revenue Report';
 $breadcrumb = [['label'=>'Reports','url'=>BASE_URL.'admin/reports/'],['label'=>'Revenue','active'=>true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 
 $from = get('from', date('Y-01-01'));
 $to   = get('to',   date('Y-m-d'));

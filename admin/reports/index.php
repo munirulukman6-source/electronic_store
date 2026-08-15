@@ -1,8 +1,12 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
 $pageTitle  = 'Sales Report';
 $breadcrumb = [['label' => 'Reports', 'active' => true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 
 $reportModel = new Report();
 $from = get('from', date('Y-m-01'));

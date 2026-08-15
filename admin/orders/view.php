@@ -1,31 +1,38 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
-
-$pageTitle  = 'Order Detail';
-$breadcrumb = [['label' => 'Orders', 'url' => BASE_URL . 'admin/orders/'], ['label' => 'View', 'active' => true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
 requireStaff();
 
 $orderModel = new Order();
 $id         = (int)get('id');
 $order      = $orderModel->getById($id);
-if (!$order) { setFlash('danger', 'Order not found.'); redirect(BASE_URL . 'admin/orders/'); }
+if (!$order) {
+    setFlash('danger', 'Order not found.');
+    redirect(BASE_URL . 'admin/orders/');
+}
 
-// Handle status update POST
+// Handle status update POST before any HTML output
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
     if ($action === 'update_status') {
         $result = $orderModel->updateStatus($id, post('status'), post('note'));
         setFlash($result['success'] ? 'success' : 'danger', $result['message']);
-        redirect($_SERVER['REQUEST_URI']);
+        redirect(BASE_URL . 'admin/orders/view.php?id=' . $id);
     }
     if ($action === 'record_payment') {
         $orderModel->recordPayment($id, post('payment_method'), (float)post('amount'), post('txn_id'));
         setFlash('success', 'Payment recorded.');
-        redirect($_SERVER['REQUEST_URI']);
+        redirect(BASE_URL . 'admin/orders/view.php?id=' . $id);
     }
 }
-$breadcrumb[1]['label'] = '#' . $order['order_number'];
+
+$pageTitle  = 'Order Detail';
+$breadcrumb = [
+    ['label' => 'Orders', 'url' => BASE_URL . 'admin/orders/'],
+    ['label' => '#' . $order['order_number'], 'active' => true]
+];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 ?>
 
 <div class="page-header d-flex justify-content-between align-items-center">

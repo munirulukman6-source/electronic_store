@@ -1,9 +1,13 @@
 <?php
 // admin/orders/index.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
 $pageTitle  = 'Orders';
 $breadcrumb = [['label' => 'Orders', 'active' => true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 $orderModel = new Order();
 $filters    = ['status' => get('status', ''), 'payment_status' => get('payment_status', ''), 'search' => get('search', ''), 'date_from' => get('date_from', ''), 'date_to' => get('date_to', '')];
 $page       = max(1, (int)get('page', 1));

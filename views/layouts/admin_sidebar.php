@@ -70,6 +70,7 @@ $siteName   = getSetting('site_name', APP_NAME);
             </a>
         </li>
 
+        <?php if (isAdmin() || isInventoryManager()): ?>
         <li class="menu-label">Catalog</li>
 
         <li class="has-submenu <?= isCurrentPage('/admin/products') ? 'open active' : '' ?>">
@@ -81,8 +82,10 @@ $siteName   = getSetting('site_name', APP_NAME);
                 <li><a href="<?= BASE_URL ?>admin/products/add.php"><i class="fas fa-plus me-2"></i>Add Product</a></li>
                 <li><a href="<?= BASE_URL ?>admin/products/categories.php"><i class="fas fa-tags me-2"></i>Categories</a></li>
                 <li><a href="<?= BASE_URL ?>admin/products/brands.php"><i class="fas fa-certificate me-2"></i>Brands</a></li>
+                <?php if (isAdmin()): ?>
                 <li><a href="<?= BASE_URL ?>admin/flash_sales/"><i class="fas fa-bolt me-2"></i>Flash Sales</a></li>
                 <li><a href="<?= BASE_URL ?>admin/bundles/"><i class="fas fa-layer-group me-2"></i>Bundles</a></li>
+                <?php endif; ?>
             </ul>
         </li>
 
@@ -103,8 +106,10 @@ $siteName   = getSetting('site_name', APP_NAME);
                 <li><a href="<?= BASE_URL ?>admin/suppliers/"><i class="fas fa-truck-loading me-2"></i>Suppliers</a></li>
             </ul>
         </li>
+        <?php endif; ?>
 
-        <li class="menu-label">Sales</li>
+        <?php if (isAdmin() || isSalesOfficer()): ?>
+        <li class="menu-label">Sales & Orders</li>
 
         <li class="has-submenu <?= isCurrentPage('/admin/orders') ? 'open active' : '' ?>">
             <a href="#" class="submenu-toggle">
@@ -132,6 +137,15 @@ $siteName   = getSetting('site_name', APP_NAME);
             <a href="<?= BASE_URL ?>admin/coupons/"><i class="fas fa-tags"></i><span>Coupons</span></a>
         </li>
 
+        <?php if (isSalesOfficer() && !isAdmin()): ?>
+        <li class="<?= isCurrentPage('/admin/flash_sales') ? 'active' : '' ?>">
+            <a href="<?= BASE_URL ?>admin/flash_sales/"><i class="fas fa-bolt"></i><span>Flash Sales</span></a>
+        </li>
+        <li class="<?= isCurrentPage('/admin/bundles') ? 'active' : '' ?>">
+            <a href="<?= BASE_URL ?>admin/bundles/"><i class="fas fa-layer-group"></i><span>Bundles</span></a>
+        </li>
+        <?php endif; ?>
+
         <li class="<?= isCurrentPage('/admin/returns') ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>admin/returns/">
                 <i class="fas fa-undo-alt"></i><span>Returns</span>
@@ -141,6 +155,11 @@ $siteName   = getSetting('site_name', APP_NAME);
             </a>
         </li>
 
+        <li class="<?= isCurrentPage('/admin/reviews') ? 'active' : '' ?>">
+            <a href="<?= BASE_URL ?>admin/reviews/"><i class="fas fa-star"></i><span>Reviews</span></a>
+        </li>
+        <?php endif; ?>
+
         <li class="menu-label">Analytics</li>
 
         <li class="has-submenu <?= isCurrentPage('/admin/reports') ? 'open active' : '' ?>">
@@ -148,13 +167,20 @@ $siteName   = getSetting('site_name', APP_NAME);
                 <i class="fas fa-chart-bar"></i><span>Reports</span><i class="fas fa-chevron-right arrow"></i>
             </a>
             <ul class="submenu list-unstyled">
+                <?php if (isAdmin() || isSalesOfficer()): ?>
                 <li><a href="<?= BASE_URL ?>admin/reports/"><i class="fas fa-chart-line me-2"></i>Sales Report</a></li>
+                <?php endif; ?>
+                <?php if (isAdmin() || isInventoryManager()): ?>
                 <li><a href="<?= BASE_URL ?>admin/reports/inventory.php"><i class="fas fa-boxes me-2"></i>Inventory Report</a></li>
+                <?php endif; ?>
+                <?php if (isAdmin() || isSalesOfficer()): ?>
                 <li><a href="<?= BASE_URL ?>admin/reports/customers.php"><i class="fas fa-user-chart me-2"></i>Customer Report</a></li>
                 <li><a href="<?= BASE_URL ?>admin/reports/revenue.php"><i class="fas fa-dollar-sign me-2"></i>Revenue Report</a></li>
+                <?php endif; ?>
             </ul>
         </li>
 
+        <?php if (isAdmin()): ?>
         <li class="menu-label">Management</li>
 
         <li class="<?= isCurrentPage('/admin/staff') ? 'active' : '' ?>">
@@ -165,10 +191,6 @@ $siteName   = getSetting('site_name', APP_NAME);
             <a href="<?= BASE_URL ?>admin/newsletter/"><i class="fas fa-envelope-open-text"></i><span>Newsletter</span></a>
         </li>
 
-        <li class="<?= isCurrentPage('/admin/reviews') ? 'active' : '' ?>">
-            <a href="<?= BASE_URL ?>admin/reviews/"><i class="fas fa-star"></i><span>Reviews</span></a>
-        </li>
-
         <li class="<?= isCurrentPage('/admin/settings') ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>admin/settings/"><i class="fas fa-cog"></i><span>Settings</span></a>
         </li>
@@ -176,6 +198,7 @@ $siteName   = getSetting('site_name', APP_NAME);
         <li class="<?= isCurrentPage('/admin/audit') ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>admin/audit/"><i class="fas fa-history"></i><span>Audit Logs</span></a>
         </li>
+        <?php endif; ?>
 
         <li class="menu-label">Account</li>
         <li><a href="<?= BASE_URL ?>customer/profile.php"><i class="fas fa-user-cog"></i><span>My Profile</span></a></li>
@@ -241,7 +264,9 @@ $siteName   = getSetting('site_name', APP_NAME);
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="<?= BASE_URL ?>customer/profile.php"><i class="fas fa-user me-2"></i>Profile</a></li>
+                    <?php if (isAdmin()): ?>
                     <li><a class="dropdown-item" href="<?= BASE_URL ?>admin/settings/"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                    <?php endif; ?>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item text-danger" href="<?= BASE_URL ?>auth/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                 </ul>

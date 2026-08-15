@@ -1,11 +1,13 @@
 <?php
 // admin/flash_sales/index.php
-$pageTitle  = 'Flash Sales';
-$breadcrumb = [['label' => 'Flash Sales', 'active' => true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
 
-// Handle create flash sale
+$db = Database::getInstance();
+
+// Handle create flash sale before layout
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
     if ($action === 'create_flash') {
@@ -28,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         redirect(BASE_URL . 'admin/flash_sales/');
     }
 }
+
+$pageTitle  = 'Flash Sales';
+$breadcrumb = [['label' => 'Flash Sales', 'active' => true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $sales    = $db->fetchAll(
     "SELECT fs.*, p.product_name, p.slug AS product_slug,

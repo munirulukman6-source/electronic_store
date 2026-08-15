@@ -1,10 +1,10 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
-
-$pageTitle  = 'Brands';
-$breadcrumb = [['label'=>'Products','url'=>BASE_URL.'admin/products/'],['label'=>'Brands','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
 requireStaff();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
@@ -35,6 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         redirect(BASE_URL.'admin/products/brands.php');
     }
 }
+
+$pageTitle  = 'Brands';
+$breadcrumb = [['label'=>'Products','url'=>BASE_URL.'admin/products/'],['label'=>'Brands','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $brands = $db->fetchAll("SELECT b.*,(SELECT COUNT(*) FROM products WHERE brand_id=b.id AND status='active') AS product_count
     FROM brands b ORDER BY b.brand_name");

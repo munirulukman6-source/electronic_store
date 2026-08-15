@@ -1,9 +1,13 @@
 <?php
 // admin/customers/index.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
 $pageTitle  = 'Customers';
 $breadcrumb = [['label' => 'Customers', 'active' => true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 
 $search = get('search', '');
 $tier   = get('tier', '');

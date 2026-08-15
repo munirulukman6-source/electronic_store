@@ -1,10 +1,10 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
-
-$pageTitle  = 'Categories';
-$breadcrumb = [['label'=>'Products','url'=>BASE_URL.'admin/products/'],['label'=>'Categories','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
 requireStaff();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
@@ -38,6 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         redirect(BASE_URL.'admin/products/categories.php');
     }
 }
+
+$pageTitle  = 'Categories';
+$breadcrumb = [['label'=>'Products','url'=>BASE_URL.'admin/products/'],['label'=>'Categories','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+
 $categories = $db->fetchAll("SELECT c.*,p.category_name AS parent_name,
     (SELECT COUNT(*) FROM products WHERE category_id=c.id AND status='active') AS product_count
     FROM categories c LEFT JOIN categories p ON c.parent_id=p.id ORDER BY c.sort_order,c.category_name");

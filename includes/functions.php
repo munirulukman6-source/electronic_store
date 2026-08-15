@@ -12,6 +12,12 @@ if (!ob_get_level()) {
 function bootstrap(): void
 {
     require_once ROOT_PATH . 'config/config.php';
+    require_once ROOT_PATH . 'classes/Database.php';
+    require_once ROOT_PATH . 'classes/User.php';
+    require_once ROOT_PATH . 'classes/Product.php';
+    require_once ROOT_PATH . 'classes/Order.php';
+    require_once ROOT_PATH . 'classes/Cart.php';
+    require_once ROOT_PATH . 'classes/Inventory.php';
 
     if (!ob_get_level()) {
         ob_start();
@@ -60,10 +66,14 @@ function requireRole(string ...$roles): void
 
 function requireAdmin(): void { requireRole('admin'); }
 function requireStaff(): void { requireRole('admin', 'inventory_manager', 'sales_officer'); }
+function requireInventory(): void { requireRole('admin', 'inventory_manager'); }
+function requireSales(): void { requireRole('admin', 'sales_officer'); }
 function isLoggedIn(): bool   { return !empty($_SESSION['logged_in']); }
 function isAdmin(): bool      { return ($_SESSION['role'] ?? '') === 'admin'; }
+function isInventoryManager(): bool { return ($_SESSION['role'] ?? '') === 'inventory_manager'; }
+function isSalesOfficer(): bool { return ($_SESSION['role'] ?? '') === 'sales_officer'; }
 function isCustomer(): bool   { return ($_SESSION['role'] ?? '') === 'customer'; }
-function isStaff(): bool      { return in_array($_SESSION['role'] ?? '', ['admin','inventory_manager','sales_officer']); }
+function isStaff(): bool      { return in_array($_SESSION['role'] ?? '', ['admin','inventory_manager','sales_officer'], true); }
 function currentUserId(): ?int{ return $_SESSION['user_id'] ?? null; }
 function currentCustomerId(): ?int { return $_SESSION['customer_id'] ?? null; }
 
@@ -109,15 +119,16 @@ function displayFlash(): string
 // ── Redirect ──────────────────────────────────────────────────────────────────
 function redirect(string $url, int $code = 302): never
 {
-    if (ob_get_level()) {
-        ob_clean();
-    }
-
     if (!headers_sent()) {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
         header("Location: $url", true, $code);
     } else {
-        echo "<script>window.location.href=" . json_encode($url) . ";</script>";
-        echo "<noscript><meta http-equiv=\"refresh\" content=\"0;url=" . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . "\"></noscript>";
+        while (ob_get_level()) {
+            ob_end_flush();
+        }
+        echo "<!DOCTYPE html><html><head><meta http-equiv=\"refresh\" content=\"0;url=" . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . "\"><script>window.location.href=" . json_encode($url) . ";</script></head><body><p>Redirecting to <a href=\"" . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . "\">" . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . "</a>...</p></body></html>";
     }
     exit;
 }
@@ -125,8 +136,8 @@ function redirect(string $url, int $code = 302): never
 // ── JSON response ─────────────────────────────────────────────────────────────
 function jsonResponse(array $data, int $code = 200): never
 {
-    if (ob_get_level()) {
-        ob_clean();
+    while (ob_get_level()) {
+        ob_end_clean();
     }
 
     if (!headers_sent()) {

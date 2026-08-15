@@ -1,9 +1,13 @@
 <?php
 // admin/reports/inventory.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireInventory();
+
 $pageTitle  = 'Inventory Report';
 $breadcrumb = [['label'=>'Reports','url'=>BASE_URL.'admin/reports/'],['label'=>'Inventory','active'=>true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
 
 $reportModel = new Report();
 $invModel    = new Inventory();
