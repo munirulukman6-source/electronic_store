@@ -1,4 +1,9 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireStaff();
+
 $pageTitle  = 'Dashboard';
 $breadcrumb = [['label' => 'Dashboard', 'active' => true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';

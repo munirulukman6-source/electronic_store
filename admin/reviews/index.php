@@ -1,9 +1,11 @@
 <?php
 // admin/reviews/index.php
-$pageTitle  = 'Product Reviews';
-$breadcrumb = [['label'=>'Reviews','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
     $action = post('action'); $id = (int)post('id');
@@ -12,6 +14,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
     if ($action==='reply')    { $db->update('reviews',['admin_reply'=>post('reply'),'status'=>'approved'],'id=?',[$id]); setFlash('success','Reply saved.'); }
     redirect(BASE_URL.'admin/reviews/');
 }
+
+$pageTitle  = 'Product Reviews';
+$breadcrumb = [['label'=>'Reviews','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $status  = get('status','pending');
 $page    = max(1,(int)get('page',1));

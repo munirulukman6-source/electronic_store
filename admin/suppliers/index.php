@@ -1,9 +1,11 @@
 <?php
 // admin/suppliers/index.php
-$pageTitle  = 'Suppliers';
-$breadcrumb = [['label' => 'Suppliers', 'active' => true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
 requireRole('admin', 'inventory_manager');
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
@@ -32,6 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         redirect(BASE_URL . 'admin/suppliers/');
     }
 }
+
+$pageTitle  = 'Suppliers';
+$breadcrumb = [['label' => 'Suppliers', 'active' => true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $suppliers = $db->fetchAll(
     "SELECT s.*, COUNT(DISTINCT p.id) AS product_count, COALESCE(SUM(i.quantity),0) AS total_stocked

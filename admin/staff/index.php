@@ -1,9 +1,11 @@
 <?php
 // admin/staff/index.php
-$pageTitle  = 'Staff Management';
-$breadcrumb = [['label' => 'Staff', 'active' => true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
 requireAdmin();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
@@ -39,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         redirect(BASE_URL . 'admin/staff/');
     }
 }
+
+$pageTitle  = 'Staff Management';
+$breadcrumb = [['label' => 'Staff', 'active' => true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $staff = $db->fetchAll(
     "SELECT u.id, u.full_name, u.email, u.phone, u.status, u.last_login, u.avatar,

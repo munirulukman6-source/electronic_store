@@ -1,9 +1,11 @@
 <?php
 // admin/newsletter/index.php
-$pageTitle  = 'Newsletter';
-$breadcrumb = [['label'=>'Newsletter','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireAdmin();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
     $action = post('action');
@@ -31,6 +33,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
         redirect(BASE_URL.'admin/newsletter/');
     }
 }
+
+$pageTitle  = 'Newsletter';
+$breadcrumb = [['label'=>'Newsletter','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $search = get('search','');
 $where  = $search ? "WHERE email LIKE '%$search%' OR name LIKE '%$search%'" : '';

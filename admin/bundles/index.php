@@ -1,9 +1,11 @@
 <?php
 // admin/bundles/index.php
-$pageTitle  = 'Product Bundles';
-$breadcrumb = [['label'=>'Bundles','active'=>true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireStaff();
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireSales();
+
+$db = Database::getInstance();
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
     $action = post('action');
@@ -58,6 +60,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCsrf()) {
         redirect(BASE_URL.'admin/bundles/');
     }
 }
+
+$pageTitle  = 'Product Bundles';
+$breadcrumb = [['label'=>'Bundles','active'=>true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $bundles  = $db->fetchAll(
     "SELECT pb.*,

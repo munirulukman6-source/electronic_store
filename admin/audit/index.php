@@ -1,9 +1,13 @@
 <?php
 // admin/audit/index.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireAdmin();
+
 $pageTitle  = 'Audit Logs';
 $breadcrumb = [['label'=>'Audit Logs','active'=>true]];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireAdmin();
 
 $filters = [
     'module'    => get('module',''),

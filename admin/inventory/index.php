@@ -1,12 +1,12 @@
 <?php
-$pageTitle  = 'Inventory';
-$breadcrumb = [['label' => 'Inventory', 'active' => true]];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
-requireRole('admin', 'inventory_manager');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/config/config.php';
+require_once ROOT_PATH . 'includes/functions.php';
+bootstrap();
+requireInventory();
 
 $inventoryModel = new Inventory();
 
-// Handle Stock In POST
+// Handle Stock In POST before layout
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     $action = post('action');
     if ($action === 'stock_in') {
@@ -19,14 +19,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
             post('notes')
         );
         setFlash($result['success'] ? 'success' : 'danger', $result['message']);
-        redirect($_SERVER['REQUEST_URI']);
+        redirect(BASE_URL . 'admin/inventory/');
     }
     if ($action === 'adjust') {
         $result = $inventoryModel->adjust((int)post('product_id'), (int)post('new_quantity'), post('reason'));
         setFlash($result['success'] ? 'success' : 'danger', $result['message']);
-        redirect($_SERVER['REQUEST_URI']);
+        redirect(BASE_URL . 'admin/inventory/');
     }
 }
+
+$pageTitle  = 'Inventory';
+$breadcrumb = [['label' => 'Inventory', 'active' => true]];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/electronic_store/views/layouts/admin_sidebar.php';
 
 $db       = Database::getInstance();
 $filters  = ['type' => get('type',''), 'date_from' => get('date_from',''), 'date_to' => get('date_to','')];
