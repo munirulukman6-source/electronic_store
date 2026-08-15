@@ -4,6 +4,10 @@
  * Electronic Devices E-Commerce System
  */
 
+if (!ob_get_level()) {
+    ob_start();
+}
+
 // ── Bootstrap (autoload classes) ─────────────────────────────────────────────
 function bootstrap(): void
 {
@@ -105,15 +109,30 @@ function displayFlash(): string
 // ── Redirect ──────────────────────────────────────────────────────────────────
 function redirect(string $url, int $code = 302): never
 {
-    header("Location: $url", true, $code);
+    if (ob_get_level()) {
+        ob_clean();
+    }
+
+    if (!headers_sent()) {
+        header("Location: $url", true, $code);
+    } else {
+        echo "<script>window.location.href=" . json_encode($url) . ";</script>";
+        echo "<noscript><meta http-equiv=\"refresh\" content=\"0;url=" . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . "\"></noscript>";
+    }
     exit;
 }
 
 // ── JSON response ─────────────────────────────────────────────────────────────
 function jsonResponse(array $data, int $code = 200): never
 {
-    http_response_code($code);
-    header('Content-Type: application/json');
+    if (ob_get_level()) {
+        ob_clean();
+    }
+
+    if (!headers_sent()) {
+        http_response_code($code);
+        header('Content-Type: application/json');
+    }
     echo json_encode($data);
     exit;
 }
