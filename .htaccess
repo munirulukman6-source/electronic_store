@@ -1,0 +1,85 @@
+Options -Indexes
+Options +FollowSymLinks
+
+# ── URL Rewriting ────────────────────────────────────────────────
+RewriteEngine On
+RewriteBase /electronic_store/
+
+# Redirect www to non-www (update domain for production)
+# RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+# RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+# Force HTTPS in production (uncomment when live)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── Pretty product URLs: /product/slug → /product.php?slug=slug ──
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^product/([a-zA-Z0-9\-]+)/?$ product.php?slug=$1 [QSA,L]
+
+# ── Pretty bundle URLs: /bundle/slug → /bundle.php?slug=slug ─────
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^bundle/([a-zA-Z0-9\-]+)/?$ bundle.php?slug=$1 [QSA,L]
+
+# ── Protect sensitive directories ─────────────────────────────────
+RewriteRule ^config/.*$   - [F,L]
+RewriteRule ^classes/.*$  - [F,L]
+RewriteRule ^includes/.*$ - [F,L]
+RewriteRule ^database/.*$ - [F,L]
+RewriteRule ^logs/.*$     - [F,L]
+
+# Block access to .env and hidden files
+RewriteRule ^\.env         - [F,L]
+RewriteRule ^\.git/.*$     - [F,L]
+RedirectMatch 404 /\..*
+
+# ── Security Headers ──────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options    "nosniff"
+    Header always set X-Frame-Options           "SAMEORIGIN"
+    Header always set X-XSS-Protection         "1; mode=block"
+    Header always set Referrer-Policy          "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy       "geolocation=(),microphone=(),camera=()"
+    # Uncomment CSP in production (adjust domains as needed)
+    # Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net code.jquery.com cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' cdnjs.cloudflare.com;"
+</IfModule>
+
+# ── PHP Settings ──────────────────────────────────────────────────
+<IfModule mod_php.c>
+    php_flag  display_errors  Off
+    php_value upload_max_filesize 10M
+    php_value post_max_size      12M
+    php_value max_execution_time 60
+    php_value memory_limit       256M
+    php_flag  session.cookie_httponly On
+    php_flag  session.use_strict_mode On
+</IfModule>
+
+# ── Browser Caching ───────────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg         "access plus 1 month"
+    ExpiresByType image/png          "access plus 1 month"
+    ExpiresByType image/webp         "access plus 1 month"
+    ExpiresByType image/gif          "access plus 1 month"
+    ExpiresByType image/svg+xml      "access plus 1 month"
+    ExpiresByType image/x-icon       "access plus 1 year"
+    ExpiresByType text/css           "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType application/json   "access plus 0 seconds"
+    ExpiresByType text/html          "access plus 0 seconds"
+</IfModule>
+
+# ── GZIP Compression ──────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ── Error Documents ───────────────────────────────────────────────
+ErrorDocument 404 /electronic_store/error404.php
+ErrorDocument 403 /electronic_store/error403.php
+ErrorDocument 500 /electronic_store/error500.php

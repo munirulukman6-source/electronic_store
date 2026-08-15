@@ -1,0 +1,272 @@
+/* =============================================================
+   ElectroStore — Product Image Styles (All Devices)
+   Responsive, retina-ready, performant
+   ============================================================= */
+
+/* ── Base product image wrapper ───────────────────────────────── */
+.card-img-top-wrap {
+    position: relative;
+    overflow: hidden;
+    background: var(--es-card-bg);
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--es-radius) var(--es-radius) 0 0;
+}
+
+/* ── Actual img inside the wrapper ───────────────────────────── */
+.card-img-top-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* fills the box cleanly */
+    object-position: center;
+    transition: transform .45s cubic-bezier(.25,.46,.45,.94);
+    display: block;
+}
+
+/* ── Hover zoom ───────────────────────────────────────────────── */
+.product-card:hover .card-img-top-wrap img {
+    transform: scale(1.07);
+}
+
+/* ── SVG-generated images: object-fit contain for flat renders ── */
+.card-img-top-wrap img[src*="product_img.php"] {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--es-radius) var(--es-radius) 0 0;
+}
+
+/* ── Product detail gallery ───────────────────────────────────── */
+.product-gallery-main {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    height: 420px;
+    background: var(--es-card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
+}
+
+.product-gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .3s ease;
+}
+
+.product-gallery-main img[src*="product_img.php"] {
+    object-fit: cover;
+    border-radius: var(--es-radius);
+}
+
+.product-gallery-main:hover img {
+    transform: scale(1.04);
+}
+
+/* ── Thumbnail strip ──────────────────────────────────────────── */
+.product-gallery-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.thumb-item {
+    width: 72px;
+    height: 72px;
+    border: 2px solid var(--es-border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all .2s ease;
+    flex-shrink: 0;
+}
+
+.thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb-item.active,
+.thumb-item:hover {
+    border-color: var(--es-primary);
+    box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+    transform: translateY(-2px);
+}
+
+/* ── Admin product thumbnail ──────────────────────────────────── */
+.prod-thumb {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--es-border);
+    flex-shrink: 0;
+    background: var(--es-body-bg);
+}
+
+/* ── Cart item image ──────────────────────────────────────────── */
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--es-border);
+    flex-shrink: 0;
+}
+
+/* ── Hero banner background images ───────────────────────────── */
+.hero-slide {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: brightness(.85) saturate(1.1);
+    z-index: 0;
+}
+
+/* ── Wishlist page images ─────────────────────────────────────── */
+.wishlist-item img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--es-border);
+}
+
+/* ── Category icon images ─────────────────────────────────────── */
+.cat-chip-icon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* ── Brand logo ───────────────────────────────────────────────── */
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+    padding: 3px;
+    background: #fff;
+    border: 1px solid var(--es-border);
+}
+
+/* ── Compare table product images ─────────────────────────────── */
+.compare-product-img {
+    width: 100%;
+    max-width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--es-border);
+    margin: 0 auto;
+    display: block;
+}
+
+/* ── Image loading skeleton ───────────────────────────────────── */
+@keyframes imgSkeleton {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.img-skeleton {
+    background: linear-gradient(90deg, var(--es-border) 25%, rgba(255,255,255,.06) 50%, var(--es-border) 75%);
+    background-size: 800px 100%;
+    animation: imgSkeleton 1.4s infinite linear;
+}
+
+/* ── RESPONSIVE BREAKPOINTS ───────────────────────────────────── */
+
+/* Mobile — 1 column */
+@media (max-width: 576px) {
+    .card-img-top-wrap              { height: 180px; }
+    .product-gallery-main           { height: 260px; }
+    .thumb-item                     { width: 56px; height: 56px; }
+    .cart-item-img                  { width: 64px; height: 64px; }
+    .wishlist-item img              { width: 80px;  height: 80px; }
+    .compare-product-img            { height: 110px; }
+
+    /* Ensure SVG images fill mobile cards properly */
+    .card-img-top-wrap img[src*="product_img.php"] {
+        object-fit: cover;
+        border-radius: 12px 12px 0 0;
+    }
+}
+
+/* Small tablets */
+@media (min-width: 576px) and (max-width: 768px) {
+    .card-img-top-wrap              { height: 195px; }
+    .product-gallery-main           { height: 320px; }
+}
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 992px) {
+    .card-img-top-wrap              { height: 210px; }
+    .product-gallery-main           { height: 370px; }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+    .card-img-top-wrap              { height: 230px; }
+    .product-gallery-main           { height: 440px; }
+    .thumb-item                     { width: 78px; height: 78px; }
+}
+
+/* Large screens */
+@media (min-width: 1400px) {
+    .card-img-top-wrap              { height: 250px; }
+}
+
+/* ── High-DPI / Retina screens ─────────────────────────────────── */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .card-img-top-wrap img,
+    .product-gallery-main img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* ── Dark mode image adjustments ─────────────────────────────── */
+[data-bs-theme="dark"] .card-img-top-wrap {
+    background: #1a1e2e;
+}
+
+[data-bs-theme="dark"] .prod-thumb {
+    background: #1a1e2e;
+    border-color: #2a2f45;
+}
+
+[data-bs-theme="dark"] .brand-logo {
+    background: #1a1e2e;
+    border-color: #2a2f45;
+}
+
+/* ── Image overlay gradient (subtle on cards) ─────────────────── */
+.card-img-top-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to top, rgba(0,0,0,0.06), transparent);
+    pointer-events: none;
+}
+
+/* ── Image error fallback style ───────────────────────────────── */
+img.img-error {
+    object-fit: cover;
+    filter: grayscale(1) opacity(.4);
+}
